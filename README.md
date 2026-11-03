@@ -2,7 +2,7 @@
 
 **Gustavo Carrillo · Senior Full-Stack Engineer · [g.yokebed@gmail.com](mailto:g.yokebed@gmail.com)**
 
-[**▶ Try the live demo**](https://dojoflow.mx/en/demo) · [**Live product**](https://dojoflow.mx) · [AI case study](docs/case-study.md) · [Architecture](docs/architecture.md) · [How I build with AI](docs/how-i-build-with-ai.md)
+[**▶ Try the live demo**](https://dojoflow.mx/en/demo) · [**Live product**](https://dojoflow.mx) · [AI case study](docs/case-study.md) · [Architecture](docs/architecture.md) · [Performance](docs/performance.md) · [How I build with AI](docs/how-i-build-with-ai.md)
 
 > I architected, built, and run **DojoFlow** — a production multi-tenant SaaS for martial arts schools — solo, end-to-end: Next.js 15 frontend, NestJS 11 API, PostgreSQL on Supabase, Stripe + manual Mexico-first billing, WhatsApp/email communications, and an **AI Owner Copilot** with tool calling, streaming, multi-agent workflows, evals, and observability. This repo is a curated, public window into that private codebase.
 
