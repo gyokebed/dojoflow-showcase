@@ -25,25 +25,15 @@ A school owner runs their entire dojo: students and families, belt progression w
 
 ## Architecture
 
-```mermaid
-graph LR
-  subgraph Client [Next.js 15 · React 19 · RSC]
-    UI[App Router · next-intl es/en] --> API2[fetch layer + optimistic UI]
-  end
-  subgraph Server [NestJS 11 modular monolith]
-    GW[JWT auth · RBAC guards · capability service] --> MOD[Domain modules]
-    MOD --> PRISMA[Prisma 6]
-    AI[AI service: Vercel AI SDK · Anthropic] --> TOOLS[Zod-parameterized tools → Prisma]
-    AGENT[LangGraph announcement agent] --> |human-in-the-loop| APPROVE[Owner approval queue]
-  end
-  Client -->|REST /v1 + streaming| Server
-  PRISMA --> DB[(PostgreSQL · Supabase)]
-  Server --> STRIPE[Stripe Connect + billing lifecycle]
-  Server --> COMMS[Resend email · WhatsApp Cloud]
-  AI --> LF[Langfuse observability + evals]
-```
+**The real thing** — from the repo's Excalidraw sources (edited on excalidraw.com, exported by `npm run diagrams:export`):
 
-Full detail: [docs/architecture.md](docs/architecture.md) · Decision log: [docs/adr/](docs/adr/)
+<p align="center">
+  <img src="docs/diagrams/tech-stack.png" alt="DojoFlow tech stack — Next.js 15 client and NestJS 11 server over PostgreSQL/Supabase" width="860">
+</p>
+
+<p align="center"><sub>Client: Tailwind · Radix · FullCalendar/RRule · TipTap · Recharts · Vitest — Server: JWT/Argon2 · Prisma 6 · Stripe · Resend · Vercel AI SDK · LangGraph · Langfuse · Jest</sub></p>
+
+More diagrams in [`docs/diagrams/`](docs/diagrams/) (SVG + PNG). Text-version overview: [docs/architecture.md](docs/architecture.md) · Decision log: [docs/adr/](docs/adr/)
 
 ## Code exhibits (read-only excerpts from the private repo)
 
