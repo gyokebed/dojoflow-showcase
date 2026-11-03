@@ -16,7 +16,7 @@
 | Automated tests | **835** (733 Jest server · 102 Vitest client) — all green, gated in CI |
 | Prisma schema | 1,235 lines · 44 models · multi-tenant, multi-vertical |
 | Development span | 14 months, 1,335+ commits, ~230 PRs — solo, spec-driven |
-| AI eval suite (golden dataset) | **7/7 scenarios** vs the real Anthropic API · $0.083 full run |
+| AI eval suite (golden dataset) | **10/10 scenarios** vs the real Anthropic API (7 core + 3 RAG) · $0.153 full run |
 | Production | Vercel (client) + Render (API) + Supabase (Postgres) · gated deploys |
 
 ## What DojoFlow does
@@ -58,7 +58,7 @@ The complete system — 44-model schema, 30+ modules, the full test suite, CI/CD
 
 ## AI, end to end
 
-The Copilot isn't a bolt-on demo: tool calls hit the real multi-tenant database through Zod-validated contracts; streaming renders token-by-token with stop/error states; announcement drafting runs a bounded multi-agent graph whose output **pauses for owner approval** as a database state transition; every model call is traced in Langfuse; and a golden-dataset eval (`npm run eval:ai`) reports pass rate, latency, tokens, and cost per scenario — 7/7 at $0.083 per full run. Full story with numbers: **[docs/case-study.md](docs/case-study.md)**.
+The Copilot isn't a bolt-on demo: tool calls hit the real multi-tenant database through Zod-validated contracts; streaming renders token-by-token with stop/error states; announcement drafting runs a bounded multi-agent graph whose output **pauses for owner approval** as a database state transition; a tenant-isolated **Dojo Library** (pgvector RAG, ADR-0009) answers questions from owner-published documents with citations and refuses what it doesn't know; every model call is traced in Langfuse; and a golden-dataset eval (`npm run eval:ai`) reports pass rate, latency, tokens, and cost per scenario — **10/10 at $0.153 per full run** (7 core + 3 RAG). Full story with numbers: **[docs/case-study.md](docs/case-study.md)**.
 
 ---
 

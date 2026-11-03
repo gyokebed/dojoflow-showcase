@@ -42,15 +42,22 @@ and refuses when nothing relevant is found.
 
 ## Measured evidence (eval run 2026-11-03, real Anthropic API)
 
-- 7/7 pre-existing golden scenarios still pass (no regression from the new
-  tool + prompt).
-- **`unknown-refusal` passes even with embedding config absent** — the
-  fail-soft path was exercised live: retrieval off ⇒ tool returns no results ⇒
-  the model answered "don't have that information" instead of inventing a
-  refund policy.
-- The two grounded scenarios (`tournament-deadline`, `belt-testing-rules`)
-  are gated on a real `OPENAI_API_KEY` for indexing; fixture + seed script
-  (`npm run seed:dojo-library`) are in place to complete them.
+- **10/10 scenarios pass** ($0.153 full run, 82.7s, ~35.3K in / 3.1K out tokens):
+  7 pre-existing golden scenarios still pass (no regression from the new tool
+  + prompt); both grounded scenarios pass **with a facing citation line**
+  (`Source: <document title>`) verified in the final answer; the
+  `unknown-refusal` scenario passes — the model says "I do not have that
+  information" instead of inventing a refund policy.
+- The citation line is enforced by prompt, not luck: the system prompt
+  mandates `Source: <title>` and the finalizing (structuring) pass is
+  instructed to preserve it.
+- Evals are heuristic by design (LLM output isn't deterministic): facts are
+  asserted as substrings (`december 15`, source names) rather than exact
+  match; scenario keywords were tightened after a first run surfaced
+  `'register'` vs `'registration'` phrasing.
+- Fail-soft path was also exercised live: with embedding config absent, the
+  same harness still passed the refusal scenario while the grounded ones
+  reported their blocker. (Complete numbers in `eval-reports/latest.json`.)
 
 ## Consequences
 
