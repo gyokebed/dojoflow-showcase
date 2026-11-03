@@ -64,3 +64,41 @@ Per this session's planning decisions, everything above was built and fully test
 ## On screenshots and the demo video
 
 This sandbox has no Chrome/Playwright available (a recurring constraint across all four weeks — noted in each week's verified footnote), so no screenshots or the walkthrough video the roadmap's Demo Checkpoint calls for could be captured here. Everything above was verified instead via `tsc`, `eslint`, the full Jest/Vitest suites (691 server tests + 95 client tests, all green), and direct calls against the real Anthropic API and dev database — described in the numbers section above. Recording the walkthrough video and taking the `/settings/ai-observability` / `/agent-approvals` / `/copilot` screenshots is a natural next step once the hand-off checklist above is complete and there's a real browser available.
+
+---
+
+## Addendum — 2026-11-03: Dojo Library (tenant-isolated RAG on pgvector)
+
+The next AI-product iteration after the 4-week sprint: retrieval over owner-published
+information, spec-first under `specs/rag-dojo-library/` (ADR-0009), shipped as PR #232.
+
+**What it is.** Owners publish documents — tournaments, seminars, dojo rules,
+announcements — from a new `/settings/dojo-library` page. On publish, the document is
+chunked (hand-rolled ~400-token windows with 80-token overlap, word-boundary aligned)
+and embedded (OpenAI `text-embedding-3-small` via direct REST — deliberately **no new
+npm dependency**, preserving ADR-0002/0008's pinned-tree discipline) into **pgvector
+on the existing Supabase Postgres**. Drafts are never indexed; unpublishing purges
+chunks.
+
+**Retrieval.** A `searchDojoLibrary` tool lets the Copilot answer rule/event questions
+from the corpus. Isolation is enforced in SQL, not the prompt: `tenantId`,
+`published`, and `locale` filters live inside the `<=>` similarity query against the
+HNSW cosine index — the ADR-0001 discipline applied to vectors. A concurrency unit
+test proves two tenants' concurrent searches never cross-contaminate (input-derived
+mocks, mirroring the agent isolation test).
+
+**Citations and refusal.** The system prompt mandates a `Source: <document title>`
+citation line, preserved by the finalizing pass. When retrieval finds nothing relevant
+— or embeddings are unconfigured — the Copilot says it does not have the information
+rather than inventing rules. A hallucinated belt-test requirement is worse than no
+answer.
+
+**Measured (real eval run, real Anthropic + OpenAI APIs).** The golden dataset grew to
+**10 scenarios: 10/10 pass · $0.153 full run · 82.7s**. The original 7 still pass
+unchanged; both RAG scenarios return grounded answers with the source named; the
+unknown-topic scenario passes **by refusing**. The fail-soft path was also exercised
+live: before the embedding key existed, the same harness still passed the refusal
+scenario with retrieval disabled.
+
+Live in production the same day; the hand-off checklist from this write-up applied
+again — prod migration gated, `OPENAI_API_KEY` added to Render's env.
