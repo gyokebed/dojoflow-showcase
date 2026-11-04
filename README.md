@@ -13,7 +13,7 @@
 | Metric | Value |
 |---|---|
 | TypeScript in production codebase | **124,300 LOC** (68.3K client · 54.3K server) |
-| Automated tests | **835** (733 Jest server · 102 Vitest client) — all green, gated in CI |
+| Automated tests | **849** (747 Jest server · 102 Vitest client) — all green, gated in CI |
 | Prisma schema | 1,235 lines · 44 models · multi-tenant, multi-vertical |
 | Development span | 14 months, 1,335+ commits, ~230 PRs — solo, spec-driven |
 | AI eval suite (golden dataset) | **10/10 scenarios** vs the real Anthropic API (7 core + 3 RAG) · $0.153 full run |
